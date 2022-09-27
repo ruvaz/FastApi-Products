@@ -1,13 +1,14 @@
 from fastapi import FastAPI, Depends
-from passlib.context import CryptContext
+
 from sqlalchemy.orm import Session
 
 import schemas
 import models
 from database import engine, get_db
-from routers import product
+from routers import product, seller
 
 # uvicorn main:app --reload
+
 app = FastAPI(
     title='Product API',
     description='This is a simple API for Product',
@@ -23,30 +24,14 @@ app = FastAPI(
         'url': 'https://www.google.com/policies/terms/'
     },
     openapi_url='/api/openapi.json',
-    docs_url='/api/documentation',
+    docs_url='/api/docs',
     redoc_url='/api/redoc'
 
 )
 
 # add product router
 app.include_router(product.router)
-
-# to has passwords
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+app.include_router(seller.router)
 
 # create tables
 models.Base.metadata.create_all(engine)
-
-
-@app.post('/seller', response_model=schemas.DisplaySeller, tags=['Seller'])
-def create_seller(request: schemas.Seller, db: Session = Depends(get_db)):
-    hashedpassword = pwd_context.hash(request.password)
-    new_seller = models.Seller(
-        username=request.username,
-        email=request.email,
-        password=hashedpassword
-    )
-    db.add(new_seller)
-    db.commit()
-    db.refresh(new_seller)
-    return new_seller

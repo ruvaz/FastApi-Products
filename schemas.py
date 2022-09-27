@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -8,7 +10,7 @@ class Product(BaseModel):
 
 
 class Seller(BaseModel):
-    username: str = Field(...,example='Seller`')
+    username: str = Field(...,example='seller')
     email: str = Field(...,example='email@server.com')
     password: str = Field(...,example='123456')
 
@@ -28,3 +30,15 @@ class DisplayProduct(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class Login(BaseModel):
+    username: str = Field(..., example='seller')
+    password: str = Field(..., example='123456')
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: Optional[str] = None

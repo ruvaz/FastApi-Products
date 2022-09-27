@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 import schemas
 import models
 from database import engine, get_db
-from routers import product, seller
+from routers import product, seller, login
 
 # uvicorn main:app --reload
 
@@ -32,6 +32,7 @@ app = FastAPI(
 # add product router
 app.include_router(product.router)
 app.include_router(seller.router)
+app.include_router(login.router)
 
 # create tables
 models.Base.metadata.create_all(engine)

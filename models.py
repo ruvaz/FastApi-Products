@@ -23,3 +23,4 @@ class Seller(Base):
     email = Column(String)
     password = Column(String)
     products = relationship('Product', back_populates='seller')  # relationship to product table
+

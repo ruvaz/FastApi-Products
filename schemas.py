@@ -1,7 +1,5 @@
 from pydantic import BaseModel, Field
 
-#for validations
-
 
 class Product(BaseModel):
     name: str = Field(..., example='iPhone 12')
@@ -9,21 +7,24 @@ class Product(BaseModel):
     price: float = Field(..., example=1100.00)
 
 
-class DisplayProduct(BaseModel):
-    name: str
-    description: str
-    class Config:
-        orm_mode = True
-
-
 class Seller(BaseModel):
-    username: str
-    email: str
-    password: str
+    username: str = Field(...,example='Seller`')
+    email: str = Field(...,example='email@server.com')
+    password: str = Field(...,example='123456')
 
 
 class DisplaySeller(BaseModel):
     username: str
     email: str
+
+    class Config:
+        orm_mode = True
+
+
+class DisplayProduct(BaseModel):
+    name: str
+    description: str
+    seller: DisplaySeller
+
     class Config:
         orm_mode = True
